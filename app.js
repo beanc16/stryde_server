@@ -103,11 +103,15 @@ app.use("/user", function(req, res, next)
  *******************/
 
 // Must come after Middleware for Middleware to work
-const mysqlGets = require("./external_routes/mysql_gets");		// Get routes for MySQL
-const mysqlPosts = require("./external_routes/mysql_gets");		// Post routes for MySQL
+const mysqlGets = require("./external_routes/mysql_gets");			// Get routes for MySQL
+const mysqlPosts = require("./external_routes/mysql_posts");		// Post routes for MySQL
+const publicViews = require("./external_routes/public_views");		// Public views
+const privateViews = require("./external_routes/private_views");	// Private views
 
 app.use("/", mysqlGets);
 app.use("/", mysqlPosts);
+app.use("/", publicViews);
+app.use("/", privateViews);
 
 
 
@@ -145,25 +149,7 @@ app.get("/ping", function(req, res)
     res.send("pong");
 });
 
-// Login
 /*
-app.get("/login", function(req, res)
-{
-    res.render("loggedOut/login", {
-        title: "Login",
-        error: null
-    });
-});
-
-// Register
-app.get("/register", function(req, res)
-{
-    res.render("loggedOut/register", {
-        title: "Register",
-        error: null
-    });
-});
-
 // Logout
 app.get("/logout", function(req, res)
 {

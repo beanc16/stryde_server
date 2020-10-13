@@ -21,7 +21,7 @@ module.exports = (function()
 	
 	// Encryption
 	const bcrypt = require("bcrypt");
-	const saltRounds = process.env.BCRYPT_SALT;
+	const saltRounds = parseInt(process.env.BCRYPT_SALT);
 
 
 	// MySQL
@@ -48,14 +48,14 @@ module.exports = (function()
 
 		const storedProcedureToRun = "getUserByUsername";
 		const keywordParameters = [formData.username];
-		const successRoute = "/home";
+		const successRoute = "/user/home";
 
 		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
 			.then(function (result)
 			{
-				tryLogin(req, res, formData.password, result[0])
+				tryLogin(req, res, formData.password, result[0][0])
 					.then(
-						(user) => onSuccessfulLogin(req, res, user)
+						(user) => onSuccessfulLogin(req, res, user, successRoute)
 					)
 					.catch(
 						(err) => onFailedLogin(res, err)
@@ -63,10 +63,11 @@ module.exports = (function()
 			})
 			.catch(function (err)
 			{
-				//res.render("loggedOut/login", {error: "An unknown error occurred while logging in."});
-				console.log("An unknown error occurred while logging in.");
+				res.render("loggedOut/login", {
+					title: "Login",
+					error: "An unknown error occurred while logging in."
+				});
 			});
-		}
 	});
 
 	async function tryLogin(req, res, formPassword, user)
@@ -76,7 +77,7 @@ module.exports = (function()
 			try
 			{
 				// Username not found
-				if (user.length <= 0)
+				if (user["user_username"] == null)
 				{
 					reject("Invalid username.");
 				}
@@ -107,7 +108,7 @@ module.exports = (function()
 		});
 	}
 	
-	function onSuccessfulLogin(req, res, successRoute)
+	function onSuccessfulLogin(req, res, user, successRoute)
 	{
 		//req.session.user = result;
 		res.redirect(successRoute);
@@ -115,23 +116,41 @@ module.exports = (function()
 	
 	function onFailedLogin(res, err)
 	{
-		if (err.includes("Invalid username"))
+		try
 		{
-			//res.render("loggedOut/login", {error: "Invalid username."});
+			if (err.includes("Invalid username"))
+			{
+				res.render("loggedOut/login", {
+					title: "Login",
+					error: "Invalid username."
+				});
+			}
+			
+			else if (err.includes("Invalid password"))
+			{
+				res.render("loggedOut/login", {
+					title: "Login",
+					error: "Invalid password."
+				});
+			}
+			
+			else
+			{
+				res.render("loggedOut/login", {
+					title: "Login",
+					error: "User does not exist."
+				});
+			}
 		}
 		
-		else if (err.includes("Invalid password"))
+		catch (err2)
 		{
-			//res.render("loggedOut/login", {error: "Invalid password."});
+			res.render("loggedOut/login", {
+				title: "Login",
+				error: "An unknown error occurred while logging in."
+			});
+			console.log(err);
 		}
-		
-		else
-		{
-			//res.render("loggedOut/login", {error: "User does not exist."});
-		}
-		
-		//DELETE AFTER RES.RENDERS ARE DONE
-		console.log(err);
 	}
 
     
@@ -147,20 +166,20 @@ module.exports = (function()
 
 		const storedProcedureToRun = "registerUser";
 		const keywordParameters = [formData.username, encryptedPassword];
-		const errorMessage = "Failed to register user. A user with that username may already exist.";
+		const errorMessage = "Failed to register. A user with that username may already exist.";
 
 		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
 			.then(function (result)
 			{
-				//res.redirect("/login");
-				console.log("Registered successfully");
+				res.redirect("/user/home");
 			})
 			.catch(function (err)
 			{
-				//res.render("loggedOut/register", {error: errorMessage});
-				console.log(errorMessage);
+				res.render("loggedOut/register", {
+					title: "Register",
+					error: errorMessage
+				});
 			});
-		}
 	});
 	
 	

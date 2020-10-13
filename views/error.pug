@@ -1,0 +1,10 @@
+doctype html
+html
+    include templates/head
+    body
+        if (user)
+            include templates/navbar_logged_in
+        else
+            include templates/navbar_logged_out
+
+        h3.error #{error}

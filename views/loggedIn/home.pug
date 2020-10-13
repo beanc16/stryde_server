@@ -1,0 +1,17 @@
+doctype html
+html
+    include ../templates/head
+    body
+        include ../templates/navbar_logged_in
+
+        div.col
+            h1= "Welcome, " + username
+            br
+
+            //a.btn.btn-primary.btn-md(href="/routeHere") Display Text
+            //br
+            //br
+            //a.btn.btn-secondary.btn-md(href="/otherRouteHere") More Display Text
+
+        p.error #{error}
+        

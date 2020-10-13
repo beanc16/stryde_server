@@ -34,7 +34,7 @@ module.exports = (function()
      * GETS *
      ********/
 
-    // <routeNameHere
+    // DELETE THIS LATER
     app.get("/allUsers", function (req, res)
     {
         const query = "select * from user";
@@ -50,7 +50,6 @@ module.exports = (function()
 			{
 				console.log(err);
 				res.send(err);
-				//res.render("loggedOut/login", {error: "An unknown error occurred while logging in."});
 			});
     });
 
@@ -70,7 +69,6 @@ module.exports = (function()
 			{
 				console.log(err);
 				res.send(err);
-				//res.render("loggedOut/login", {error: "An unknown error occurred while logging in."});
 			});
     });
 	
