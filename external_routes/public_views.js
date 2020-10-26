@@ -56,6 +56,14 @@ module.exports = (function()
 		});
 	});
 	
+	// COLOR BLIND TEST (DELETE LATER)
+	app.get("/colorBlind", function(req, res)
+	{
+		res.render("colorBlind", {
+			title: "Color Blind Test"
+		});
+	});
+	
 	
 	
 	
