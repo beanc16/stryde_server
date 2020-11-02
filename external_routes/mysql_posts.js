@@ -36,9 +36,9 @@ module.exports = (function()
 
 
 
-    /*********
-     * POSTS *
-     *********/
+    /************************
+     * LOGIN / REGISTRATION *
+     ************************/
 	 
 	// Login
 	app.post("/login", function(req, res)
@@ -179,6 +179,129 @@ module.exports = (function()
 					title: "Register",
 					error: errorMessage
 				});
+			});
+	});
+	
+	
+	/************
+     * WORKOUTS *
+     ************/
+	
+	// Create workout
+    app.post("/user/createWorkout", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+
+		const storedProcedureToRun = "createWorkout";
+		const keywordParameters = [formData.userId, formData.workoutName, formData.workoutDescription];
+		const errorMessage = "Failed to create workout. Please try again.";
+
+		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
+			.then(function (result)
+			{
+				//res.redirect("/user/home");
+				res.send("Created workout: " + formdata.workoutName);
+			})
+			.catch(function (err)
+			{
+				/*
+				res.render("loggedOut/register", {
+					title: "Register",
+					error: errorMessage
+				});
+				*/
+				res.send(err);
+			});
+	});
+	
+	// Update workout
+    app.post("/user/updateWorkout", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+
+		const storedProcedureToRun = "updateWorkout";
+		const keywordParameters = [formData.workoutId, formData.workoutName, formData.workoutDescription];
+		const errorMessage = "Failed to update workout. Please try again.";
+
+		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
+			.then(function (result)
+			{
+				//res.redirect("/user/home");
+				res.send("Updated workout: " + formdata.workoutName);
+			})
+			.catch(function (err)
+			{
+				/*
+				res.render("loggedOut/register", {
+					title: "Register",
+					error: errorMessage
+				});
+				*/
+				res.send(err);
+			});
+	});
+	
+		
+	
+	/*************
+     * SUPERSETS *
+     *************/
+	 
+	// Create superset
+    app.post("/user/createSuperset", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+
+		const storedProcedureToRun = "createSuperset";
+		const keywordParameters = [formData.userId, formData.supersetName];
+		const errorMessage = "Failed to create superset. Please try again.";
+
+		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
+			.then(function (result)
+			{
+				//res.redirect("/user/home");
+				res.send("Created superset: " + formdata.supersetName);
+			})
+			.catch(function (err)
+			{
+				/*
+				res.render("loggedOut/register", {
+					title: "Register",
+					error: errorMessage
+				});
+				*/
+				res.send(err);
+			});
+	});
+	 
+	// Update superset
+    app.post("/user/updateSuperset", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+
+		const storedProcedureToRun = "updateSuperset";
+		const keywordParameters = [formData.supersetId, formData.supersetName];
+		const errorMessage = "Failed to update superset. Please try again.";
+
+		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
+			.then(function (result)
+			{
+				//res.redirect("/user/home");
+				res.send("Updated superset: " + formdata.supersetName);
+			})
+			.catch(function (err)
+			{
+				/*
+				res.render("loggedOut/register", {
+					title: "Register",
+					error: errorMessage
+				});
+				*/
+				res.send(err);
 			});
 	});
 	

@@ -108,10 +108,10 @@ const mysqlPosts = require("./external_routes/mysql_posts");		// Post routes for
 const publicViews = require("./external_routes/public_views");		// Public views
 const privateViews = require("./external_routes/private_views");	// Private views
 
-app.use("/", mysqlGets);
-app.use("/", mysqlPosts);
 app.use("/", publicViews);
 app.use("/", privateViews);
+app.use("/", mysqlGets);
+app.use("/", mysqlPosts);
 
 
 
