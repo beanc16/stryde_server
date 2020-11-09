@@ -243,7 +243,35 @@ module.exports = (function()
 			});
 	});
 	
-		
+	// Delete workout
+    app.post("/user/deleteWorkout", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+
+		const storedProcedureToRun = "deleteWorkout";
+		const keywordParameters = [formData.workoutId];
+		const errorMessage = "Failed to delete workout. Please try again.";
+
+		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
+			.then(function (result)
+			{
+				//res.redirect("/user/home");
+				res.send("Deleted workout: " + formdata.supersetName);
+			})
+			.catch(function (err)
+			{
+				/*
+				res.render("loggedOut/register", {
+					title: "Register",
+					error: errorMessage
+				});
+				*/
+				res.send(err);
+			});
+	});
+	
+	
 	
 	/*************
      * SUPERSETS *
@@ -292,6 +320,34 @@ module.exports = (function()
 			{
 				//res.redirect("/user/home");
 				res.send("Updated superset: " + formdata.supersetName);
+			})
+			.catch(function (err)
+			{
+				/*
+				res.render("loggedOut/register", {
+					title: "Register",
+					error: errorMessage
+				});
+				*/
+				res.send(err);
+			});
+	});
+	
+	// Delete superset
+    app.post("/user/deleteSuperset", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+
+		const storedProcedureToRun = "deleteSuperset";
+		const keywordParameters = [formData.supersetId];
+		const errorMessage = "Failed to delete superset. Please try again.";
+
+		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
+			.then(function (result)
+			{
+				//res.redirect("/user/home");
+				res.send("Deleted superset: " + formdata.supersetName);
 			})
 			.catch(function (err)
 			{
