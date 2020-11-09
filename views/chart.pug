@@ -1,0 +1,12 @@
+doctype html
+html
+    include templates/head
+    body
+        if (user)
+            include templates/navbar_logged_in
+        else
+            include templates/navbar_logged_out
+        
+        // Container is necessary for the graph to be responsive
+        div.weightGraphContainer(style="position: relative; margin: auto; height: 80vh; width: 80vw")
+            canvas#weightGraph

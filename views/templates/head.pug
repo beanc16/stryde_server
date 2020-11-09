@@ -2,21 +2,70 @@ head
     title=title
     meta(charset="utf-8" name="viewport"
          content="width=device-width, initial-scale=1")
+    
 
+    // ----------------------------------------------------------------
     // CSS Libraries
+    // ----------------------------------------------------------------
+    
+    // Bootstrap
     link(href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css",
          rel="stylesheet")
-    link(href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/css/bootstrap-slider.min.css"
-         rel="stylesheet")
+    // Bootstrap Slider
+    //link(href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/css/bootstrap-slider.min.css"
+    //     rel="stylesheet")
+    
+    // ----------------------------------------------------------------
+    
 
+    // ----------------------------------------------------------------
     // CSS
-    link(href="./css/colorBlind.css", rel="stylesheet")
+    // ----------------------------------------------------------------
+    
+    //link(href="./css/colorBlind.css", rel="stylesheet")
+    
+    if includeDragAndDrop != null
+        if includeDragAndDrop
+            link(href="../css/dragAndDrop.css", rel="stylesheet")
+    
+    // ----------------------------------------------------------------
+    
 
+    // ----------------------------------------------------------------
     // JS Libraries
+    // ----------------------------------------------------------------
+    
+    // jQuery
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js")
+    // Popper
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js")
+    // Bootstrap
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js")
-    script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/bootstrap-slider.min.js")
+    // Bootstrap Slider
+    //script(src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/10.6.2/bootstrap-slider.min.js")
+    
+    if includeDragAndDrop
+        // jQuery UI (for drag & drop)
+        script(src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js")
+    
+    if includeChartJs
+        // Chart.js
+        script(src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0")
+        // Patternomaly (for color blindness)
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/patternomaly/1.3.2/patternomaly.js")
+    
+    // ----------------------------------------------------------------
+    
 
+    // ----------------------------------------------------------------
     // JS
-    // customJsHereLater
+    // ----------------------------------------------------------------
+    
+    if includeDragAndDrop
+        script(src="../js/dragAndDrop.js")
+    
+    if includeChartJs
+        script(src="../js/enums/ColorsEnum.js")
+        script(src="../js/charts.js")
+    
+    // ----------------------------------------------------------------

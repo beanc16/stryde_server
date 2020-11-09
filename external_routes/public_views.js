@@ -64,6 +64,15 @@ module.exports = (function()
 		});
 	});
 	
+	// CHART/GRAPH TEST (DELETE LATER)
+	app.get("/chart", function(req, res)
+	{
+		res.render("chart", {
+			title: "Chart/Graph Test",
+			includeChartJs: true
+		});
+	});
+	
 	
 	
 	
