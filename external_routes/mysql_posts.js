@@ -363,6 +363,109 @@ module.exports = (function()
 	
 	
 	
+	/*************
+     * EXERCISES *
+     *************/
+	
+	//
+	
+	
+	
+	/******************
+     * USER EXERCISES *
+     ******************/
+	
+	// Create user exercise
+    app.post("/user/createUserExercise", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+
+		const storedProcedureToRun = "createUserExercise";
+		const keywordParameters = [formData.userId, formData.exerciseId, formData.description,
+								   formData.sets, formData.reps, formData.weight, 
+								   formData.duration, formData.distance, formData.resistance];
+		const errorMessage = "Failed to create user exercise. Please try again.";
+
+		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
+			.then(function (result)
+			{
+				//res.redirect("/user/home");
+				res.send("Created user exercise with user ID of: " + formdata.userId);
+			})
+			.catch(function (err)
+			{
+				/*
+				res.render("loggedOut/register", {
+					title: "Register",
+					error: errorMessage
+				});
+				*/
+				res.send(err);
+			});
+	});
+	
+	// Update user exercise
+    app.post("/user/updateUserExerciseInformation", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+
+		const storedProcedureToRun = "updateUserExerciseInformation";
+		const keywordParameters = [formData.userExerciseId, formData.description, 
+								   formData.sets, formData.reps, formData.weight,
+								   formData.duration, formData.distance, 
+								   formData.resistance];
+		const errorMessage = "Failed to update user exercise. Please try again.";
+
+		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
+			.then(function (result)
+			{
+				//res.redirect("/user/home");
+				res.send("Updated user exercise with userExerciseId of: " + formdata.userExerciseId);
+			})
+			.catch(function (err)
+			{
+				/*
+				res.render("loggedOut/register", {
+					title: "Register",
+					error: errorMessage
+				});
+				*/
+				res.send(err);
+			});
+	});
+	
+	// Delete user exercise
+    app.post("/user/deleteUserExercise", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+
+		const storedProcedureToRun = "deleteUserExercise";
+		const keywordParameters = [formData.userExerciseId];
+		const errorMessage = "Failed to delete user exercise. Please try again.";
+
+		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureToRun, keywordParameters)
+			.then(function (result)
+			{
+				//res.redirect("/user/home");
+				res.send("Deleted user exercise with a userExerciseId of: " + formdata.userExerciseId);
+			})
+			.catch(function (err)
+			{
+				/*
+				res.render("loggedOut/register", {
+					title: "Register",
+					error: errorMessage
+				});
+				*/
+				res.send(err);
+			});
+	});
+	
+	
+	
 	
 	
     /**********
