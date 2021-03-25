@@ -7,12 +7,6 @@ const bcrypt = require("bcrypt");
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
 
 
-// Access req.body in post requests (USED FOR FORMS)
-const bodyParser = require("body-parser");
-app.use(bodyParser.json());                         // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-
-
 // Custom modules && variables
 const mysqlHelpers = require('../../../custom_modules/mysql_helpers');
 
@@ -110,13 +104,10 @@ class UserController
 	 * POSTS
 	 */
 	
-	static async login(req)
+	static async login(req, formData)
 	{
 		return new Promise(function (resolve, reject)
 		{
-			// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
-			const formData = req.body;
-			
 			UserController.getUserByUsername(req)
 				.then(function (result)
 				{
@@ -223,13 +214,10 @@ class UserController
 	
 	
 	
-	static async register(req)
+	static async register(req, formData)
 	{
-		return new Promise(function (resolve, reject)
+		return new Promise(async function (resolve, reject)
 		{
-			// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
-			const formData = req.body;
-			
 			const encryptedPassword = await bcryptHelpers.encryptPassword(
 				bcrypt, formData.password, saltRounds
 			);

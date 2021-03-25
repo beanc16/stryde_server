@@ -16,7 +16,7 @@ const FullWorkoutOrderWithSupersetExercise =
 
 
 
-class WorkoutController
+class SupersetController
 {
 	/* 
 	 * GETS
@@ -32,18 +32,18 @@ class WorkoutController
 			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureName, keywordParameters)
 				.then(function (result)
 				{
-					WorkoutController._onSuccessfulGetWorkouts(req, result, resolve, reject);
+					SupersetController._onSuccessfulGetSupersets(req, result, resolve, reject);
 				})
 				.catch(function (err)
 				{
-					WorkoutController._onFailedGetWorkouts(req, err, reject);
+					SupersetController._onFailedGetSupersets(req, err, reject);
 				});
 		});
 	}
 	
 	
 	
-	static _onSuccessfulGetWorkouts(req, result, resolve, reject)
+	static _onSuccessfulGetSupersets(req, result, resolve, reject)
 	{
 		let newResults = result[0];
 		
@@ -58,11 +58,15 @@ class WorkoutController
 					new FullWorkoutOrderWithSupersetExercise(
 						newResults[i]
 					);
-				resultsArray.push(fwoWithSupersetExercise);
+				
+				if (fwoWithSupersetExercise.supersetId != null)
+				{
+					resultsArray.push(fwoWithSupersetExercise);
+				}
 			}
 			
 			let mysqlResults = new MySqlResults(
-				"Succeeded at finding Workouts with params: " + 
+				"Succeeded at finding Supersets with params: " + 
 					req.params.toString(),
 				resultsArray, null
 			);
@@ -73,18 +77,18 @@ class WorkoutController
 		else
 		{
 			let mysqlResults = new MySqlResults(
-				"Failed to find Workouts with params: " + 
+				"Failed to find Supersets with params: " + 
 					req.params.toString(),
-				null, "Workouts not found"
+				null, "Supersets not found"
 			);
 			reject(mysqlResults);
 		}
 	}
 	
-	static _onFailedGetWorkouts(req, err, reject)
+	static _onFailedGetSupersets(req, err, reject)
 	{
 		let mysqlResults = new MySqlResults(
-			"Failed to find Workouts with params: " + 
+			"Failed to find Supersets with params: " + 
 				req.params.toString(),
 			null, err
 		);
@@ -105,15 +109,15 @@ class WorkoutController
 	{
 		return new Promise(function (resolve, reject)
 		{
-			const storedProcedureToRun = "createWorkout";
-			const keywordParameters = [formData.userId, formData.workoutName, formData.workoutDescription];
+			const storedProcedureToRun = "createSuperset";
+			const keywordParameters = [formData.userId, formData.supersetName];
 
 			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
 				.then(function (result)
 				{
 					let results = 
-						new MySqlResults("Successful Create Workout", 
-										 "Created workout: " + 
+						new MySqlResults("Successful Create Superset", 
+										 "Created superset: " + 
 											formdata.workoutName, 
 										 null);
 					resolve(results);
@@ -121,9 +125,9 @@ class WorkoutController
 				.catch(function (err)
 				{
 					let results = 
-						new MySqlResults("Failed Create Workout", 
+						new MySqlResults("Failed Create Superset", 
 										 null, 
-										 "Failed to create workout. " + 
+										 "Failed to create superset. " + 
 										 "Please try again.");
 					reject(results);
 				});
@@ -135,24 +139,24 @@ class WorkoutController
 	{
 		return new Promise(function (resolve, reject)
 		{
-			const storedProcedureToRun = "updateWorkout";
-			const keywordParameters = [formData.workoutId, formData.workoutName, formData.workoutDescription];
+			const storedProcedureToRun = "updateSuperset";
+			const keywordParameters = [formData.workoutId, formData.supersetName];
 
 			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
 				.then(function (result)
 				{
 					let results = 
-						new MySqlResults("Successful Update Workout", 
-										 "Updated workout", 
+						new MySqlResults("Successful Update Superset", 
+										 "Updated superset", 
 										 null);
 					resolve(results);
 				})
 				.catch(function (err)
 				{
 					let results = 
-						new MySqlResults("Failed Create Workout", 
+						new MySqlResults("Failed Create Superset", 
 										 null, 
-										 "Failed to update workout. " + 
+										 "Failed to update superset. " + 
 										 "Please try again.");
 					reject(results);
 				});
@@ -164,24 +168,24 @@ class WorkoutController
 	{
 		return new Promise(function (resolve, reject)
 		{
-			const storedProcedureToRun = "deleteWorkout";
-			const keywordParameters = [formData.workoutId];
+			const storedProcedureToRun = "deleteSuperset";
+			const keywordParameters = [formData.supersetId];
 
 			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
 				.then(function (result)
 				{
 					let results = 
-						new MySqlResults("Successful Delete Workout", 
-										 "Deleted workout", 
+						new MySqlResults("Successful Delete Superset", 
+										 "Deleted superset", 
 										 null);
 					resolve(results);
 				})
 				.catch(function (err)
 				{
 					let results = 
-						new MySqlResults("Failed Delete Workout", 
+						new MySqlResults("Failed Delete Superset", 
 										 null, 
-										 "Failed to delete workout. " + 
+										 "Failed to delete superset. " + 
 										 "Please try again.");
 					reject(results);
 				});
@@ -193,5 +197,5 @@ class WorkoutController
 
 module.exports = (function()
 {
-    return WorkoutController;
+    return SupersetController;
 })();

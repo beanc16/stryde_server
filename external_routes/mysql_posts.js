@@ -37,6 +37,7 @@ module.exports = (function()
     // Controllers
 	const UserController = require("../private/js/controllers/UserController");
 	const WorkoutController = require("../private/js/controllers/WorkoutController");
+	const SupersetController = require("../private/js/controllers/SupersetController");
 
 
 
@@ -134,28 +135,15 @@ module.exports = (function()
 	{
 		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
 		const formData = req.body;
-
-		const storedProcedureToRun = "createSuperset";
-		const keywordParameters = [formData.userId, formData.supersetName];
-
-		mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
-			.then(function (result)
+		
+		SupersetController.create(req, formData)
+			.then(function (mySqlResults)
 			{
-				let results = 
-					new MySqlResults("Successful Create Superset", 
-									 "Created superset: " + 
-										formData.supersetName, 
-									 null);
-				res.send(results);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				let results = 
-					new MySqlResults("Failed Create Superset", 
-									 null, 
-									 "Failed to create superset. " + 
-									 "Please try again.");
-				res.send(results);
+				res.send(mySqlResultsErr);
 			});
 	});
 	 
@@ -164,28 +152,15 @@ module.exports = (function()
 	{
 		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
 		const formData = req.body;
-
-		const storedProcedureToRun = "updateSuperset";
-		const keywordParameters = [formData.supersetId, formData.supersetName];
-
-		mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
-			.then(function (result)
+		
+		SupersetController.update(req, formData)
+			.then(function (mySqlResults)
 			{
-				let results = 
-					new MySqlResults("Successful Update Superset", 
-									 "Updated superset: " + 
-										formData.supersetName, 
-									 null);
-				res.send(results);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				let results = 
-					new MySqlResults("Failed Update Superset", 
-									 null, 
-									 "Failed to update superset. " + 
-									 "Please try again.");
-				res.send(results);
+				res.send(mySqlResultsErr);
 			});
 	});
 	
@@ -194,27 +169,15 @@ module.exports = (function()
 	{
 		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
 		const formData = req.body;
-
-		const storedProcedureToRun = "deleteSuperset";
-		const keywordParameters = [formData.supersetId];
-
-		mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
-			.then(function (result)
+		
+		SupersetController.delete(req, formData)
+			.then(function (mySqlResults)
 			{
-				let results = 
-					new MySqlResults("Successful Delete Superset", 
-									 "Deleted superset", 
-									 null);
-				res.send(results);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				let results = 
-					new MySqlResults("Failed Delete Superset", 
-									 null, 
-									 "Failed to delete superset. " + 
-									 "Please try again.");
-				res.send(results);
+				res.send(mySqlResultsErr);
 			});
 	});
 	

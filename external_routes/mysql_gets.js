@@ -31,6 +31,7 @@ module.exports = (function()
     // Controllers
 	const UserController = require("../private/js/controllers/UserController");
 	const WorkoutController = require("../private/js/controllers/WorkoutController");
+	const SupersetController = require("../private/js/controllers/SupersetController");
 
 
 
@@ -72,6 +73,20 @@ module.exports = (function()
     app.get("/user/workouts/:userId", async function (req, res)
     {
 		WorkoutController.getByUserId(req)
+			.then(function (mySqlResults)
+			{
+				res.send(mySqlResults);
+			})
+			.catch(function (mySqlResultsErr)
+			{
+				res.send(mySqlResultsErr);
+			});
+    });
+	
+	// getAllSupersetsByUserId
+    app.get("/user/supersets/:userId", async function (req, res)
+    {
+		SupersetController.getByUserId(req)
 			.then(function (mySqlResults)
 			{
 				res.send(mySqlResults);
