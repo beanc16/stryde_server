@@ -122,12 +122,11 @@ exports.queryWithParams = function(res, connection, query, keywordParameters,
 /**
  * queryWithParamsAsync
  * Summary. Query a database with parameters passed.
- * @param            res
  * @param            connection
  * @param {String}   query
  * @param {Array}    keywordParameters
  */
-exports.queryWithParamsAsync = async function(res, connection, query, keywordParameters)
+exports.queryWithParamsAsync = async function(connection, query, keywordParameters)
 {
     return new Promise(async function (resolve, reject)
     {
@@ -226,19 +225,18 @@ exports.storedProcedureWithParams = function(res, connection, storedProcedureNam
 /**
  * storedProcedureWithParamsAsync
  * Summary. Query a database with parameters passed.
- * @param            res
  * @param            connection
  * @param {String}   storedProcedureName
  * @param {Array}    keywordParameters
  */
-exports.storedProcedureWithParamsAsync = async function(res, connection, storedProcedureName, keywordParameters)
+exports.storedProcedureWithParamsAsync = async function(connection, storedProcedureName, keywordParameters)
 {
 	return new Promise(function (resolve, reject)
     {
 		const questionMarks = getStoredProceduresParametersString(keywordParameters);
 		const query = "call " + storedProcedureName + "(" + questionMarks + ")";
 		
-		exports.queryWithParamsAsync(res, connection, query, keywordParameters)
+		exports.queryWithParamsAsync(connection, query, keywordParameters)
 			.then(function(results)
 			{
 				resolve(results);

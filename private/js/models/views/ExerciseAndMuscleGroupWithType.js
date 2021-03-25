@@ -2,7 +2,7 @@ let ExerciseWithType = require("./ExerciseWithType");
 let MuscleGroupWithType = require("./MuscleGroupWithType");
 
 
-class ExerciseWithType
+class ExerciseAndMuscleGroupWithType
 {
     constructor(exerciseId, exerciseName, exerciseDescription,
                 exerciseWeightTypeName, exerciseMuscleTypeName,

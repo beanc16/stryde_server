@@ -21,10 +21,15 @@ module.exports = (function()
 	
 	// MySQL
 	const connection = require("./mysql_connection");
+	let MySqlResults = require("./mysql_results");
 
 
     // Custom modules && variables
     const mysqlHelpers = require('../custom_modules/mysql_helpers');
+
+
+    // Controllers
+	const UserController = require("../private/js/controllers/UserController");
 
 
 
@@ -34,41 +39,31 @@ module.exports = (function()
      * GETS *
      ********/
 
-    // DELETE THIS LATER
-    app.get("/allUsers", function (req, res)
+    // getUserById
+    app.get("/user/id/:userId", async function (req, res)
     {
-        const query = "select * from user";
-		const errorMessage = "Failed to get all users";
-
-		mysqlHelpers.queryNoParamsAsync(res, connection, query, errorMessage)
-			.then(async function (result)
+		UserController.getById(req)
+			.then(function (mySqlResults)
 			{
-				console.log(result);
-				res.json(result);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				console.log(err);
-				res.send(err);
+				res.send(mySqlResultsErr);
 			});
     });
 
-    // getUserById
-    app.get("/user/:userId", function (req, res)
+    // getUserByUsername
+    app.get("/user/username/:username", async function (req, res)
     {
-        const storedProcedureName = "getUserById";
-		const keywordParameters = [ req.params["userId"] ];
-		
-		mysqlHelpers.storedProcedureWithParamsAsync(res, connection, storedProcedureName, keywordParameters)
-			.then(async function (result)
+		UserController.getByUsername(req)
+			.then(function (mySqlResults)
 			{
-				console.log(result);
-				res.json(result[0]);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				console.log(err);
-				res.send(err);
+				res.send(mySqlResultsErr);
 			});
     });
 	

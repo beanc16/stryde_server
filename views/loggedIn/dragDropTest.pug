@@ -1,0 +1,32 @@
+doctype html
+html
+    include ../templates/head
+    body
+        include ../templates/navbar_logged_in
+
+        div.col
+            h1= "Welcome, " + username
+            br
+        
+        // Reference: https://codepen.io/beanc/pen/EBLbvJ
+        
+        section
+            span.droppable
+                div.nested_droppable
+                    div.draggable 
+                        p Exercise 1
+                    div.draggable 
+                        p Exercise 2
+                    //span.nested_draggable
+                        p Exercise 1
+                    //span.nested_draggable
+                        p Exercise 2
+                
+                div.draggable 
+                    p Exercise 3
+                
+                div.draggable 
+                    p Exercise 4
+        
+        //p.error #{error}
+        

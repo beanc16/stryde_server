@@ -7,6 +7,11 @@ const express = require("express");
 const app = express();
 
 
+// Enable CORS
+const cors = require("cors");
+app.use(cors());
+
+
 // Access req.body in post requests (USED FOR FORMS)
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());                         // support json encoded bodies
@@ -26,45 +31,12 @@ const publicPath = path.join(__dirname, '/public');
 app.use(express.static(publicPath));
 
 // Set default directory for views
-const viewsPath = path.join(__dirname, '/views');
+//const viewsPath = path.join(__dirname, '/views');
 
 
 // View Engine
 app.set('view engine', 'pug');
 app.set('views','./views');
-
-
-// Express Sessions
-/*
-const session = require("express-session");
-const mysqlStore = require("express-mysql-session")(session);
-
-let databaseOptions = {
-    host: "localhost",
-    port: port,
-    user: "root",
-    password: "dennisiscool",
-    database: "a_really_dark_schema",
-    schema: {
-        tableName: 'sessions',
-        columnNames: {
-            session_id: 'session_id',
-            expires: 'expires',
-            data: 'data'
-        }
-    }
-};
-
-let sessionStore = new mysqlStore(databaseOptions, connection);
-
-app.use(session({
-    key: "nWOD Final Project",
-    secret: "Is Dennis really cool?",
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-}));
-*/
 
 
 // Custom modules && variables
@@ -94,6 +66,11 @@ app.use("/user", function(req, res, next)
 });
 */
 
+/* 
+ * Add middleware app.get & app.post to authenticate the login 
+ * information of any user that tries to make a get or post request
+ */
+
 
 
 
@@ -105,11 +82,7 @@ app.use("/user", function(req, res, next)
 // Must come after Middleware for Middleware to work
 const mysqlGets = require("./external_routes/mysql_gets");			// Get routes for MySQL
 const mysqlPosts = require("./external_routes/mysql_posts");		// Post routes for MySQL
-const publicViews = require("./external_routes/public_views");		// Public views
-const privateViews = require("./external_routes/private_views");	// Private views
 
-app.use("/", publicViews);
-app.use("/", privateViews);
 app.use("/", mysqlGets);
 app.use("/", mysqlPosts);
 
@@ -126,9 +99,9 @@ app.use("/", mysqlPosts);
  */
 
 // Index
-/*
 app.get("/", function(req, res)
 {
+	/*
     // Not logged in
     if (!isUserLoggedIn(req))
     {
@@ -140,8 +113,9 @@ app.get("/", function(req, res)
     {
         res.redirect("/user/home");
     }
+	*/
+	res.redirect("/ping");
 });
-*/
 
 // Ping
 app.get("/ping", function(req, res)
@@ -161,22 +135,13 @@ app.get("/logout", function(req, res)
 
 
 /*
- * Views - Logged In
- */
-
-// Home
-// <viewHere
-
-
-
-/*
  * Miscellaneous
  */
 
 // Error Page: any get URL that isn't seen above
-/*
 app.get("*", function(req, res)
 {
+	/*
   let user = null;
 
   if (isUserLoggedIn(req))
@@ -189,8 +154,10 @@ app.get("*", function(req, res)
     error: "The URL you entered is invalid."
     user: user
   });
+  */
+  
+  res.send("The URL you entered is invalid.");
 });
-*/
 
 
 
@@ -257,7 +224,7 @@ function isUserLoggedIn(req)
  * PORT *
  ********/
 
-app.listen(process.env.PORT, function ()
+app.listen(process.env.STRYDE_PORT, function ()
 {
-  console.log("App listening on port " + process.env.PORT);
+  console.log("App listening on port " + process.env.STRYDE_PORT);
 });

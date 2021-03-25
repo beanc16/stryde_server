@@ -7,3 +7,5 @@ const ColorsEnum = {
 	BLUE: "#1064c4",
 	PURPLE: "#9a10c4"
 };
+
+Object.freeze(ColorsEnum);

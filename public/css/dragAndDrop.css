@@ -1,0 +1,105 @@
+/* 
+ * .draggable
+ * 		An element that can be dragged and dropped into .droppable 
+ * 		elements.
+ * 
+ * .nested_droppable
+ * 		A container-like element that can hold .draggable elements 
+ * 		and be dropped into .droppable elements.
+ */
+.draggable, .nested_droppable {
+	background-color: #555555;
+	cursor: move;
+	margin: 10px auto;
+	outline: 2px solid #6a6a6a;
+	padding: 10px;
+	width: 15em;
+}
+
+/* 
+ * .nested_draggable
+ * 		Same as .draggable, but nested inside of a 
+ * 		.nested_droppable element (this is necessary for the JavaScript
+ * 		to work).
+ */
+.nested_draggable {
+	background-color: #555555;
+	cursor: move;
+	margin: 10px;
+	outline: 2px solid #6a6a6a;
+	padding: 10px;
+	width: 10em;
+}
+
+/* 
+ * .ui-sortable-helper
+ * 		The element that is currently being dragged.
+ */
+.ui-sortable-helper {
+	transform: rotate(5deg);
+	transition: transform 0.1s ease-in;
+}
+
+
+
+/* 
+ * .ui-sortable-placeholder
+ * 		The area where the .draggable element that's currently being
+ * 		dragged will be dropped.
+ */
+.ui-sortable-placeholder {
+	background-color: #404040;
+	margin: 10px;
+	padding: 10px;
+}
+
+/* 
+ * .ui-sortable-placeholder-nested 
+ * 		Same as .ui-sortable-placeholder, but for nested elements.
+ */
+.ui-sortable-placeholder-nested {
+	background-color: #4a4a4a;
+	margin: 10px;
+	padding: 10px;
+}
+
+
+
+/* 
+ * .droppable
+ * 		A container-like element that can hold .draggable elements.
+ */
+.droppable {
+}
+
+
+
+/* DELETE LATER, JUST FOR TESTING */
+body {
+    align-items: center;
+    background-color: #2b2b2b;
+    color: white;
+    /*display: flex;*/
+    font-family: Helvetica neue, roboto;
+    height: 100vh;
+    justify-content: center;
+    margin: 0 auto;
+	position: relative;
+    text-align: center;
+	vertical-align: middle;
+}
+
+section {
+	margin: auto;
+	height: 100%;
+	width: 100%;
+}
+
+div {
+    text-align: center;
+}
+
+span {
+	display: inline-block;
+	margin: auto 10px;
+}
