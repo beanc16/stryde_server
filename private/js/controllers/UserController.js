@@ -6,11 +6,19 @@ let MySqlResults = require("../../../external_routes/mysql_results");
 const bcrypt = require("bcrypt");
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
 
+
+// Access req.body in post requests (USED FOR FORMS)
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());                         // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+
 // Custom modules && variables
 const mysqlHelpers = require('../../../custom_modules/mysql_helpers');
 
 // Models
 const UserExperience = require("../models/views/UserExperience");
+
 
 
 class UserController
@@ -102,10 +110,13 @@ class UserController
 	 * POSTS
 	 */
 	
-	static async login(req, formData)
+	static async login(req)
 	{
 		return new Promise(function (resolve, reject)
 		{
+			// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+			const formData = req.body;
+			
 			UserController.getUserByUsername(req)
 				.then(function (result)
 				{
@@ -212,24 +223,30 @@ class UserController
 	
 	
 	
-	static async register(req, formData)
+	static async register(req)
 	{
-		const encryptedPassword = await bcryptHelpers.encryptPassword(
-			bcrypt, formData.password, saltRounds
-		);
+		return new Promise(function (resolve, reject)
+		{
+			// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+			const formData = req.body;
+			
+			const encryptedPassword = await bcryptHelpers.encryptPassword(
+				bcrypt, formData.password, saltRounds
+			);
 
-		const storedProcedureToRun = "registerUser";
-		const keywordParameters = [formData.username, encryptedPassword];
+			const storedProcedureToRun = "registerUser";
+			const keywordParameters = [formData.username, encryptedPassword];
 
-		mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
-			.then(function (result)
-			{
-				UserController._onSuccessfulRegister(req, result, resolve);
-			})
-			.catch(function (err)
-			{
-				UserController._onFailedRegister(err, reject);
-			});
+			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
+				.then(function (result)
+				{
+					UserController._onSuccessfulRegister(req, result, resolve);
+				})
+				.catch(function (err)
+				{
+					UserController._onFailedRegister(err, reject);
+				});
+		});
 	}
 	
 	static _onSuccessfulRegister(req, result, resolve)

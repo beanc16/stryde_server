@@ -34,6 +34,11 @@ module.exports = (function()
     const bcryptHelpers = require('../custom_modules/bcrypt_helpers');
 
 
+    // Controllers
+	const UserController = require("../private/js/controllers/UserController");
+	const WorkoutController = require("../private/js/controllers/WorkoutController");
+
+
 
 
 
@@ -44,10 +49,7 @@ module.exports = (function()
 	// Login
 	app.post("/login", function(req, res)
 	{
-		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
-		const formData = req.body;
-		
-		UserController.login(req, formData)
+		UserController.login(req)
 			.then(function (mySqlResults)
 			{
 				res.send(mySqlResults);
@@ -62,10 +64,7 @@ module.exports = (function()
 	// Register
     app.post("/register", async function(req, res)
 	{
-		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
-		const formData = req.body;
-		
-		UserController.register(req, formData)
+		WorkoutController.create(req)
 			.then(function (mySqlResults)
 			{
 				res.send(mySqlResults);
@@ -85,89 +84,42 @@ module.exports = (function()
 	// Create workout
     app.post("/user/create/workout", async function(req, res)
 	{
-		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
-		const formData = req.body;
-
-		const storedProcedureToRun = "createWorkout";
-		const keywordParameters = [formData.userId, formData.workoutName, formData.workoutDescription];
-
-		mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
-			.then(function (result)
+		WorkoutController.create(req)
+			.then(function (mySqlResults)
 			{
-				let results = 
-					new MySqlResults("Successful Create Workout", 
-									 "Created workout: " + 
-										formdata.workoutName, 
-									 null);
-				res.send(results);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				let results = 
-					new MySqlResults("Failed Create Workout", 
-									 null, 
-									 "Failed to create workout. " + 
-									 "Please try again.");
-				res.send(results);
+				res.send(mySqlResultsErr);
 			});
 	});
 	
 	// Update workout
     app.post("/user/update/workout", async function(req, res)
 	{
-		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
-		const formData = req.body;
-
-		const storedProcedureToRun = "updateWorkout";
-		const keywordParameters = [formData.workoutId, formData.workoutName, formData.workoutDescription];
-		const errorMessage = "Failed to update workout. Please try again.";
-
-		mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
-			.then(function (result)
+		WorkoutController.update(req)
+			.then(function (mySqlResults)
 			{
-				let results = 
-					new MySqlResults("Successful Update Workout", 
-									 "Updated workout", 
-									 null);
-				res.send(results);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				let results = 
-					new MySqlResults("Failed Create Workout", 
-									 null, 
-									 "Failed to update workout. " + 
-									 "Please try again.");
-				res.send(results);
+				res.send(mySqlResultsErr);
 			});
 	});
 	
 	// Delete workout
     app.post("/user/delete/workout", async function(req, res)
 	{
-		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
-		const formData = req.body;
-
-		const storedProcedureToRun = "deleteWorkout";
-		const keywordParameters = [formData.workoutId];
-
-		mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
-			.then(function (result)
+		WorkoutController.delete(req)
+			.then(function (mySqlResults)
 			{
-				let results = 
-					new MySqlResults("Successful Delete Workout", 
-									 "Deleted workout", 
-									 null);
-				res.send(results);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				let results = 
-					new MySqlResults("Failed Delete Workout", 
-									 null, 
-									 "Failed to delete workout. " + 
-									 "Please try again.");
-				res.send(results);
+				res.send(mySqlResultsErr);
 			});
 	});
 	

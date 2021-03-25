@@ -6,12 +6,20 @@ let MySqlResults = require("../../../external_routes/mysql_results");
 const bcrypt = require("bcrypt");
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
 
+
+// Access req.body in post requests (USED FOR FORMS)
+const bodyParser = require("body-parser");
+app.use(bodyParser.json());                         // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
+
 // Custom modules && variables
 const mysqlHelpers = require('../../../custom_modules/mysql_helpers');
 
 // Models
 const FullWorkoutOrderWithSupersetExercise = 
 	require("../models/views/FullWorkoutOrderWithSupersetExercise");
+
 
 
 class WorkoutController
@@ -98,67 +106,100 @@ class WorkoutController
 	 * POSTS
 	 */
 	
-	static async login(req, formData)
+	// Create / Insert
+	static async create(req)
 	{
 		return new Promise(function (resolve, reject)
 		{
-			WorkoutController.getUserByUsername(req)
+			// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+			const formData = req.body;
+			
+			const storedProcedureToRun = "createWorkout";
+			const keywordParameters = [formData.userId, formData.workoutName, formData.workoutDescription];
+
+			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
 				.then(function (result)
 				{
-					_tryLogin(formData.password, result[0][0], resolve,
-							  reject)
-						.then(function (user)
-						{
-							WorkoutController._onSuccessfulLogin(user, 
-															  resolve);
-						})
-						.catch(function (err)
-						{
-							WorkoutController._onFailedLogin(err, reject);
-						});
+					let results = 
+						new MySqlResults("Successful Create Workout", 
+										 "Created workout: " + 
+											formdata.workoutName, 
+										 null);
+					resolve(results);
 				})
-				.catch(
-					(err) => _onFailedLogin(err, reject)
-				);
-		});
+				.catch(function (err)
+				{
+					let results = 
+						new MySqlResults("Failed Create Workout", 
+										 null, 
+										 "Failed to create workout. " + 
+										 "Please try again.");
+					reject(results);
+				});
+			});
 	}
 	
-	static _onSuccessfulLogin(user, resolve)
+	// Update
+	static async update(req)
 	{
-		let mySqlResults = new MySqlResults("Successful Login", user, 
-											null);
-		resolve(mySqlResults);
-	}
-	
-	static _onFailedLogin(err, reject)
-	{
-		try
+		return new Promise(function (resolve, reject)
 		{
-			if (err.includes("Invalid username") || 
-				err.includes("Invalid password"))
-			{
-				let mySqlResults = new MySqlResults("Failed Login", 
-													null, err);
-				reject(mySqlResults);
-			}
-			
-			else
-			{
-				let mySqlResults = new MySqlResults("Failed Login", 
-													null, 
-													"User does not exist");
-				reject(mySqlResults);
-			}
+			// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+			const formData = req.body;
+
+			const storedProcedureToRun = "updateWorkout";
+			const keywordParameters = [formData.workoutId, formData.workoutName, formData.workoutDescription];
+
+			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
+				.then(function (result)
+				{
+					let results = 
+						new MySqlResults("Successful Update Workout", 
+										 "Updated workout", 
+										 null);
+					resolve(results);
+				})
+				.catch(function (err)
+				{
+					let results = 
+						new MySqlResults("Failed Create Workout", 
+										 null, 
+										 "Failed to update workout. " + 
+										 "Please try again.");
+					reject(results);
+				});
 		}
-		
-		catch (err2)
+	}
+	
+	// Delete
+	static async delete(req)
+	{
+		return new Promise(function (resolve, reject)
 		{
-			let mySqlResults = new MySqlResults("Failed Login", null, 
-												"An unknown error " +
-												"occurred while " + 
-												"logging in:\n" + 
-												err2);
-			reject(mySqlResults);
+			// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+			const formData = req.body;
+
+			const storedProcedureToRun = "deleteWorkout";
+			const keywordParameters = [formData.workoutId];
+
+			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
+				.then(function (result)
+				{
+					let results = 
+						new MySqlResults("Successful Delete Workout", 
+										 "Deleted workout", 
+										 null);
+					resolve(results);
+				})
+				.catch(function (err)
+				{
+					let results = 
+						new MySqlResults("Failed Delete Workout", 
+										 null, 
+										 "Failed to delete workout. " + 
+										 "Please try again.");
+					reject(results);
+				});
 		}
 	}
 }
