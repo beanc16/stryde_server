@@ -30,6 +30,7 @@ module.exports = (function()
 
     // Controllers
 	const UserController = require("../private/js/controllers/UserController");
+	const WorkoutController = require("../private/js/controllers/WorkoutController");
 
 
 
@@ -57,6 +58,20 @@ module.exports = (function()
     app.get("/user/username/:username", async function (req, res)
     {
 		UserController.getByUsername(req)
+			.then(function (mySqlResults)
+			{
+				res.send(mySqlResults);
+			})
+			.catch(function (mySqlResultsErr)
+			{
+				res.send(mySqlResultsErr);
+			});
+    });
+	
+	// getAllWorkoutsByUserId
+    app.get("/user/workouts/:userId", async function (req, res)
+    {
+		WorkoutController.getByUserId(req)
 			.then(function (mySqlResults)
 			{
 				res.send(mySqlResults);
