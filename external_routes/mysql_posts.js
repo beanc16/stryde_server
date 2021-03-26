@@ -38,14 +38,15 @@ module.exports = (function()
 	const UserController = require("../private/js/controllers/UserController");
 	const WorkoutController = require("../private/js/controllers/WorkoutController");
 	const SupersetController = require("../private/js/controllers/SupersetController");
+	const UserExerciseController = require("../private/js/controllers/UserExerciseController");
 
 
 
 
 
-    /************************
-     * LOGIN / REGISTRATION *
-     ************************/
+    /********************
+     * LOGIN & REGISTER *
+     ********************/
 	 
 	// Login
 	app.post("/login", function(req, res)
@@ -200,29 +201,15 @@ module.exports = (function()
 	{
 		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
 		const formData = req.body;
-
-		const storedProcedureToRun = "createUserExercise";
-		const keywordParameters = [formData.userId, formData.exerciseId, formData.description,
-								   formData.sets, formData.reps, formData.weight, 
-								   formData.duration, formData.distance, formData.resistance];
-
-		mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
-			.then(function (result)
+		
+		UserExerciseController.create(req, formData)
+			.then(function (mySqlResults)
 			{
-				let results = 
-					new MySqlResults("Successful Create User Exercise", 
-									 "Created user exercise", 
-									 null);
-				res.send(results);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				let results = 
-					new MySqlResults("Failed Create User Exercise", 
-									 null, 
-									 "Failed to create user exercise. " + 
-									 "Please try again.");
-				res.send(results);
+				res.send(mySqlResultsErr);
 			});
 	});
 	
@@ -231,30 +218,15 @@ module.exports = (function()
 	{
 		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
 		const formData = req.body;
-
-		const storedProcedureToRun = "updateUserExerciseInformation";
-		const keywordParameters = [formData.userExerciseId, formData.description, 
-								   formData.sets, formData.reps, formData.weight,
-								   formData.duration, formData.distance, 
-								   formData.resistance];
-
-		mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
-			.then(function (result)
+		
+		UserExerciseController.update(req, formData)
+			.then(function (mySqlResults)
 			{
-				let results = 
-					new MySqlResults("Successful Update User Exercise", 
-									 "Updated user exercise", 
-									 null);
-				res.send(results);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				let results = 
-					new MySqlResults("Failed Update User Exercise", 
-									 null, 
-									 "Failed to update user exercise. " + 
-									 "Please try again.");
-				res.send(results);
+				res.send(mySqlResultsErr);
 			});
 	});
 	
@@ -263,27 +235,15 @@ module.exports = (function()
 	{
 		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
 		const formData = req.body;
-
-		const storedProcedureToRun = "deleteUserExercise";
-		const keywordParameters = [formData.userExerciseId];
-
-		mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
-			.then(function (result)
+		
+		UserExerciseController.delete(req, formData)
+			.then(function (mySqlResults)
 			{
-				let results = 
-					new MySqlResults("Successful Delete User Exercise", 
-									 "Deleted user exercise", 
-									 null);
-				res.send(results);
+				res.send(mySqlResults);
 			})
-			.catch(function (err)
+			.catch(function (mySqlResultsErr)
 			{
-				let results = 
-					new MySqlResults("Failed Delete User Exercise", 
-									 null, 
-									 "Failed to delete user exercise. " + 
-									 "Please try again.");
-				res.send(results);
+				res.send(mySqlResultsErr);
 			});
 	});
 	
