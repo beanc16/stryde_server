@@ -1,5 +1,6 @@
 // MySQL
-const connection = require("../../../external_routes/mysql_connection");
+const connection = 
+	require("../../../external_routes/mysql_connection");
 let MySqlResults = require("../../../external_routes/mysql_results");
 
 // Encryption
@@ -13,6 +14,7 @@ const mysqlHelpers = require('../../../custom_modules/mysql_helpers');
 // Models
 const FullWorkoutOrderWithSupersetExercise = 
 	require("../models/views/FullWorkoutOrderWithSupersetExercise");
+const Workout = require("../models/tables/Workout");
 
 
 
@@ -22,28 +24,47 @@ class WorkoutController
 	 * GETS
 	 */
 	
-	static async getByUserId(req)
+	static async getNonEmptyByUserId(req)
 	{
 		return new Promise(function (resolve, reject)
 		{
-			const storedProcedureName = "getAllWorkoutsByUserId";
+			const storedProcedureName = "getNonEmptyWorkoutsByUserId";
 			const keywordParameters = [ req.params["userId"] ];
 			
 			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureName, keywordParameters)
 				.then(function (result)
 				{
-					WorkoutController._onSuccessfulGetWorkouts(req, result, resolve, reject);
+					WorkoutController._onSuccessfulGetNonEmptyWorkouts(req, result, resolve, reject);
 				})
 				.catch(function (err)
 				{
-					WorkoutController._onFailedGetWorkouts(req, err, reject);
+					WorkoutController._onFailedGetNonEmptyWorkouts(req, err, reject);
+				});
+		});
+	}
+	
+	static async getEmptyByUserId(req)
+	{
+		return new Promise(function (resolve, reject)
+		{
+			const storedProcedureName = "getEmptyWorkoutsByUserId";
+			const keywordParameters = [ req.params["userId"] ];
+			
+			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureName, keywordParameters)
+				.then(function (result)
+				{
+					WorkoutController._onSuccessfulGetEmptyWorkouts(req, result, resolve, reject);
+				})
+				.catch(function (err)
+				{
+					WorkoutController._onFailedGetEmptyWorkouts(req, err, reject);
 				});
 		});
 	}
 	
 	
 	
-	static _onSuccessfulGetWorkouts(req, result, resolve, reject)
+	static _onSuccessfulGetNonEmptyWorkouts(req, result, resolve, reject)
 	{
 		let newResults = result[0];
 		
@@ -62,7 +83,7 @@ class WorkoutController
 			}
 			
 			let mysqlResults = new MySqlResults(
-				"Succeeded at finding Workouts with params: " + 
+				"Succeeded at finding Non-Empty Workouts with params: " + 
 					req.params.toString(),
 				resultsArray, null
 			);
@@ -73,7 +94,7 @@ class WorkoutController
 		else if (newResults.length == 0)
 		{
 			let mysqlResults = new MySqlResults(
-				"Succeeded at finding Workouts with params: " + 
+				"Succeeded at finding Non-Empty Workouts with params: " + 
 					req.params.toString(),
 				[], null
 			);
@@ -84,7 +105,7 @@ class WorkoutController
 		else
 		{
 			let mysqlResults = new MySqlResults(
-				"Failed to find Workouts with params: " + 
+				"Failed to find Non-Empty Workouts with params: " + 
 					req.params.toString(),
 				null, "Workouts not found"
 			);
@@ -92,10 +113,69 @@ class WorkoutController
 		}
 	}
 	
-	static _onFailedGetWorkouts(req, err, reject)
+	static _onFailedGetNonEmptyWorkouts(req, err, reject)
 	{
 		let mysqlResults = new MySqlResults(
-			"Failed to find Workouts with params: " + 
+			"Failed to find Non-Empty Workouts with params: " + 
+				req.params.toString(),
+			null, err
+		);
+		
+		reject(mysqlResults);
+	}
+	
+	
+	
+	static _onSuccessfulGetEmptyWorkouts(req, result, resolve, reject)
+	{
+		let newResults = result[0];
+		
+		
+		if (newResults != null && newResults.length > 0)
+		{
+			let resultsArray = [];
+			
+			for (let i = 0; i < newResults.length; i++)
+			{
+				let workout = new Workout(newResults[i]);
+				resultsArray.push(workout);
+			}
+			
+			let mysqlResults = new MySqlResults(
+				"Succeeded at finding Empty Workouts with params: " + 
+					req.params.toString(),
+				resultsArray, null
+			);
+			
+			resolve(mysqlResults);
+		}
+		
+		else if (newResults.length == 0)
+		{
+			let mysqlResults = new MySqlResults(
+				"Succeeded at finding Empty Workouts with params: " + 
+					req.params.toString(),
+				[], null
+			);
+			
+			resolve(mysqlResults);
+		}
+		
+		else
+		{
+			let mysqlResults = new MySqlResults(
+				"Failed to find Empty Workouts with params: " + 
+					req.params.toString(),
+				null, "Workouts not found"
+			);
+			reject(mysqlResults);
+		}
+	}
+	
+	static _onFailedGetEmptyWorkouts(req, err, reject)
+	{
+		let mysqlResults = new MySqlResults(
+			"Failed to find Empty Workouts with params: " + 
 				req.params.toString(),
 			null, err
 		);

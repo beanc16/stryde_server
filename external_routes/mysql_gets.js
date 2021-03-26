@@ -72,13 +72,28 @@ module.exports = (function()
 	// getAllWorkoutsByUserId
     app.get("/user/workouts/:userId", async function (req, res)
     {
-		WorkoutController.getByUserId(req)
+		WorkoutController.getNonEmptyByUserId(req)
 			.then(function (mySqlResults)
 			{
-				res.send(mySqlResults);
+				WorkoutController.getEmptyByUserId(req)
+					.then(function (mySqlResults2)
+					{
+						res.send(new MySqlResults(
+							"Successfully obtained all workouts",
+							{
+								"nonEmptyWorkoutResults": mySqlResults,
+								"emptyWorkoutResults": mySqlResults2,
+							}, null
+						));
+					})
+					.catch(function (mySqlResultsErr2)
+					{
+						res.send(mySqlResultsErr2);
+					});
 			})
 			.catch(function (mySqlResultsErr)
 			{
+				console.log("\n\n", mySqlResultsErr);
 				res.send(mySqlResultsErr);
 			});
     });

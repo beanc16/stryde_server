@@ -17,6 +17,7 @@ class FullWorkoutOrderWithSupersetExercise
             this.exerciseMovementTypeName, this.mgName, this.mgTypeName,
             this.workoutId, this.workoutName, this.workoutDescription, this.orderInWorkout
         );
+		
         this._allSupersetInWorkout = new AllSupersetInWorkout(
             this.userId, this.supersetId, this.supersetName, this.orderInWorkout,
             this.workoutId, this.workoutName, this.workoutDescription

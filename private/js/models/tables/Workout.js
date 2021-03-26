@@ -1,32 +1,22 @@
 class Workout
 {
-    constructor(workoutId, userId, name, description)
+    constructor(workout)
     {
-        this._workoutId = workoutId;
-        this._userId = userId;
-        this._name = name;
-        this._description = description;
+        this._workoutId = workout["workout_id"];
+        this._userId = workout["user_id"];
+        this._name = workout["workout_name"];
+        this._description = workout["workout_description"];
+		
+		this.initializePublicVariables();
     }
-
-    get workoutId()
-    {
-        return this._workoutId;
-    }
-
-    get userId()
-    {
-        return this._userId;
-    }
-
-    get name()
-    {
-        return this._name;
-    }
-
-    get description()
-    {
-        return this._description;
-    }
+	
+	initializePublicVariables()
+	{
+		this.workoutId = this._workoutId;
+		this.userId = this._userId;
+		this.name = this._name;
+		this.description = this._description;
+	}
 }
 
 
