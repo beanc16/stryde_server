@@ -118,7 +118,7 @@ class SupersetController
 					let results = 
 						new MySqlResults("Successful Create Superset", 
 										 "Created superset: " + 
-											formdata.workoutName, 
+											formData.workoutName, 
 										 null);
 					resolve(results);
 				})
@@ -140,7 +140,7 @@ class SupersetController
 		return new Promise(function (resolve, reject)
 		{
 			const storedProcedureToRun = "updateSuperset";
-			const keywordParameters = [formData.workoutId, formData.supersetName];
+			const keywordParameters = [formData.supersetId, formData.supersetName];
 
 			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
 				.then(function (result)
@@ -154,7 +154,7 @@ class SupersetController
 				.catch(function (err)
 				{
 					let results = 
-						new MySqlResults("Failed Create Superset", 
+						new MySqlResults("Failed Update Superset", 
 										 null, 
 										 "Failed to update superset. " + 
 										 "Please try again.");

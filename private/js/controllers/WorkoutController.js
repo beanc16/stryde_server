@@ -114,7 +114,7 @@ class WorkoutController
 					let results = 
 						new MySqlResults("Successful Create Workout", 
 										 "Created workout: " + 
-											formdata.workoutName, 
+											formData.workoutName, 
 										 null);
 					resolve(results);
 				})

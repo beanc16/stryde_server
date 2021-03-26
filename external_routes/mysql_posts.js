@@ -51,7 +51,10 @@ module.exports = (function()
 	// Login
 	app.post("/login", function(req, res)
 	{
-		UserController.login(req)
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+		
+		UserController.login(req, formData)
 			.then(function (mySqlResults)
 			{
 				res.send(mySqlResults);
@@ -66,7 +69,10 @@ module.exports = (function()
 	// Register
     app.post("/register", async function(req, res)
 	{
-		WorkoutController.create(req)
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+		
+		UserController.register(req, formData)
 			.then(function (mySqlResults)
 			{
 				res.send(mySqlResults);
@@ -86,7 +92,10 @@ module.exports = (function()
 	// Create workout
     app.post("/user/create/workout", async function(req, res)
 	{
-		WorkoutController.create(req)
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+		
+		WorkoutController.create(req, formData)
 			.then(function (mySqlResults)
 			{
 				res.send(mySqlResults);
@@ -100,7 +109,10 @@ module.exports = (function()
 	// Update workout
     app.post("/user/update/workout", async function(req, res)
 	{
-		WorkoutController.update(req)
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+		
+		WorkoutController.update(req, formData)
 			.then(function (mySqlResults)
 			{
 				res.send(mySqlResults);
@@ -114,7 +126,10 @@ module.exports = (function()
 	// Delete workout
     app.post("/user/delete/workout", async function(req, res)
 	{
-		WorkoutController.delete(req)
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+		
+		WorkoutController.delete(req, formData)
 			.then(function (mySqlResults)
 			{
 				res.send(mySqlResults);
@@ -214,7 +229,7 @@ module.exports = (function()
 	});
 	
 	// Update user exercise
-    app.post("/user/update/userExerciseInformation", async function(req, res)
+    app.post("/user/update/userExercise", async function(req, res)
 	{
 		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
 		const formData = req.body;

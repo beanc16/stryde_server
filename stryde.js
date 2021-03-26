@@ -135,86 +135,18 @@ app.get("/logout", function(req, res)
 
 
 /*
- * Miscellaneous
+ * Error Pages
  */
 
-// Error Page: any get URL that isn't seen above
 app.get("*", function(req, res)
 {
-	/*
-  let user = null;
-
-  if (isUserLoggedIn(req))
-  {
-    user = req.session.user;
-  }
-
-  res.render("error", {
-    title: "Error - <titleHere",
-    error: "The URL you entered is invalid."
-    user: user
-  });
-  */
-  
-  res.send("The URL you entered is invalid.");
+  res.send("Invalid URL.");
 });
 
-
-
-
-
-/***********
- * HELPERS *
- ***********/
-
-/*
- * Getters
- */
-
-function getSessionUser(req)
+app.post("*", function(req, res)
 {
-    return req.session.user;
-}
-
-function getRandomString(strLength)
-{
-    // Helpers
-    let result = "";
-    let characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let charactersLength = characters.length;
-    let index = null;
-
-    for (let i = 0; i < strLength; i++)
-    {
-        index = Math.floor(Math.random() * charactersLength);
-        result += characters.charAt(index);
-    }
-
-    return result;
-}
-
-function getCombinedJsonObjects(json1, json2)
-{
-    return Object.assign({}, json1, json2);
-}
-
-
-
-/*
- * Boolean
- */
-
-/*
-function isUserLoggedIn(req)
-{
-    if (req.session.user != null)
-    {
-        return true;
-    }
-
-    return false;
-}
-*/
+  res.send("Invalid URL.");
+});
 
 
 

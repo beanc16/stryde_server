@@ -92,7 +92,7 @@ class UserExerciseController
 		return new Promise(function (resolve, reject)
 		{
 			const storedProcedureToRun = "deleteUserExercise";
-			const keywordParameters = [formData.workoutId];
+			const keywordParameters = [formData.userExerciseId];
 
 			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
 				.then(function (result)

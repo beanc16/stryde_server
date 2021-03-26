@@ -22,7 +22,7 @@ class UserExperience
 		this.username = this._user.username;
 		this.password = this._user.password;
 		this.goal = this._user.goal;
-		this.experienceName = this._experienceLevel.experienceName;
+		this.experienceName = this._experienceLevel.name;
 	}
 }
 

@@ -5,6 +5,7 @@ let MySqlResults = require("../../../external_routes/mysql_results");
 // Encryption
 const bcrypt = require("bcrypt");
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
+const bcryptHelpers = require("../../../custom_modules/bcrypt_helpers");
 
 
 // Custom modules && variables
@@ -40,10 +41,15 @@ class UserController
 		});
 	}
 	
-	static async getByUsername(req)
+	static async getByUsername(req, username)
 	{
 		return new Promise(function (resolve, reject)
 		{
+			if (username != null)
+			{
+				req.params["username"] = username;
+			}
+			
 			const storedProcedureName = "getUserByUsername";
 			const keywordParameters = [ req.params["username"] ];
 			
@@ -108,14 +114,18 @@ class UserController
 	{
 		return new Promise(function (resolve, reject)
 		{
-			UserController.getUserByUsername(req)
-				.then(function (result)
+			UserController.getByUsername(req, formData.username)
+				.then(function (mysqlResults)
 				{
-					_tryLogin(formData.password, result[0][0], resolve,
-							  reject)
+					UserController._tryLogin(formData.password, 
+											 mysqlResults._results
+														 ._user, 
+											 resolve,
+											 reject)
 						.then(function (user)
 						{
-							UserController._onSuccessfulLogin(user, 
+							console.log(mysqlResults._results);
+							UserController._onSuccessfulLogin(mysqlResults._results, 
 															  resolve);
 						})
 						.catch(function (err)
@@ -123,59 +133,56 @@ class UserController
 							UserController._onFailedLogin(err, reject);
 						});
 				})
-				.catch(
-					(err) => _onFailedLogin(err, reject)
-				);
+				.catch(function (err)
+				{
+					UserController._onFailedLogin("Invalid username", reject);
+				});
 		});
 	}
 	
-	static async _tryLogin(formPassword, user, resolve, reject)
+	static async _tryLogin(formPassword, user)
 	{
-		try
+		return new Promise(function (resolve, reject)
 		{
-			let mySqlResultsErr = new MySqlResults("Failed Login", 
-												   user, null);
-			
-			// Username not found
-			if (user["user_username"] == null)
+			try
 			{
-				mySqlResultsErr.error = "Invalid username.";
-				reject(mySqlResultsErr);
+				// Username not found
+				if (user["_username"] == null)
+				{
+					reject("Invalid username.");
+				}
+
+				bcryptHelpers.encryptedPasswordMatches(
+					bcrypt, formPassword, user["_password"]
+				)
+					.then(function (doesPasswordMatch)
+					{
+						if (doesPasswordMatch)
+						{
+							resolve(user);
+						}
+
+						else
+						{
+							reject("Invalid password.");
+						}
+					})
+					.catch(function (err)
+					{
+						reject(err);
+					});
 			}
 
-			bcryptHelpers.encryptedPasswordMatches(
-				bcrypt, formPassword, user["user_password"]
-			)
-				.then(function (doesPasswordMatch)
-				{
-					if (doesPasswordMatch)
-					{
-						resolve(user);
-					}
-
-					else
-					{
-						mySqlResultsErr.error = "Invalid password.";
-						reject(mySqlResultsErr);
-					}
-				})
-				.catch(function (err)
-				{
-					mySqlResultsErr.error = err;
-					reject(mySqlResultsErr);
-				});
-		}
-
-		catch (err)
-		{
-			mySqlResultsErr.error = err;
-			reject(mySqlResultsErr);
-		}
+			catch (err)
+			{
+				reject(err);
+			}
+		});
 	}
 	
-	static _onSuccessfulLogin(user, resolve)
+	static _onSuccessfulLogin(userExperience, resolve)
 	{
-		let mySqlResults = new MySqlResults("Successful Login", user, 
+		let mySqlResults = new MySqlResults("Successful Login", userExperience, 
 											null);
 		resolve(mySqlResults);
 	}
@@ -246,7 +253,7 @@ class UserController
 	
 	static _onFailedRegister(err, reject)
 	{
-		let mySqlResults = new MySqlResults("Successful Register", 
+		let mySqlResults = new MySqlResults("Failed Register", 
 											null, 
 											"Failed to register. A " + 
 											"user with that " + 
