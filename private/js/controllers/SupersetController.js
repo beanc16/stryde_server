@@ -74,6 +74,17 @@ class SupersetController
 			resolve(mysqlResults);
 		}
 		
+		else if (newResults.length == 0)
+		{
+			let mysqlResults = new MySqlResults(
+				"Succeeded at finding Supersets with params: " + 
+					req.params.toString(),
+				[], null
+			);
+			
+			resolve(mysqlResults);
+		}
+		
 		else
 		{
 			let mysqlResults = new MySqlResults(
