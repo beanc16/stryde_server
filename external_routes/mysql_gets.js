@@ -32,6 +32,7 @@ module.exports = (function()
 	const UserController = require("../private/js/controllers/UserController");
 	const WorkoutController = require("../private/js/controllers/WorkoutController");
 	const SupersetController = require("../private/js/controllers/SupersetController");
+	const ExerciseController = require("../private/js/controllers/ExerciseController");
 
 
 
@@ -69,6 +70,8 @@ module.exports = (function()
 			});
     });
 	
+	
+	
 	// getAllWorkoutsByUserId
     app.get("/user/workouts/:userId", async function (req, res)
     {
@@ -93,7 +96,6 @@ module.exports = (function()
 			})
 			.catch(function (mySqlResultsErr)
 			{
-				console.log("\n\n", mySqlResultsErr);
 				res.send(mySqlResultsErr);
 			});
     });
@@ -108,6 +110,22 @@ module.exports = (function()
 			})
 			.catch(function (mySqlResultsErr)
 			{
+				res.send(mySqlResultsErr);
+			});
+    });
+	
+	// getAllExercises
+    app.get("/user/exercises", async function (req, res)
+    {
+		ExerciseController.getAll()
+			.then(function (mySqlResults)
+			{
+				console.log(mySqlResults["_results"]);
+				res.send(mySqlResults);
+			})
+			.catch(function (mySqlResultsErr)
+			{
+				console.log(mySqlResultsErr);
 				res.send(mySqlResultsErr);
 			});
     });

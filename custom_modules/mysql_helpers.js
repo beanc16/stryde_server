@@ -48,18 +48,16 @@ exports.queryNoParams = function(res, connection, query, errorMessage,
 /**
  * queryNoParamsAsync
  * Summary. Query a database with no parameters passed.
- * @param            res
  * @param            connection
  * @param {String}   query
- * @param {String}   errorMessage
  */
-exports.queryNoParamsAsync = async function(res, connection, query, errorMessage)
+exports.queryNoParamsAsync = async function(connection, query)
 {
     return new Promise(function (resolve, reject)
     {
         connection.query(query, function(err, result, fields)
         {
-            // Error || There WERE NOT results from the query
+            // Error or There WERE NOT results from the query
             if (err || result.length <= 0)
             {
                 reject(err);
@@ -181,17 +179,16 @@ exports.storedProcedureNoParams = function(res, connection, storedProcedureName,
 /**
  * storedProcedureNoParamsAsync
  * Summary. Query a stored procedure in a database with no parameters passed.
- * @param            res
  * @param            connection
  * @param {String}   storedProcedureName
- * @param {String}   errorMessage
  */
-exports.storedProcedureNoParamsAsync = function(res, connection, storedProcedureName, errorMessage)
+exports.storedProcedureNoParamsAsync = function(connection, storedProcedureName)
 {
     return new Promise(function (resolve, reject)
     {
 		const query = "call " + storedProcedureName + "()";
-		exports.queryNoParamsAsync(res, connection, query, errorMessage)
+		
+		exports.queryNoParamsAsync(connection, query)
 			.then(function(results)
 			{
 				resolve(results);
