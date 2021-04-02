@@ -1,11 +1,13 @@
 // MySQL
-const connection = require("../../../external_routes/mysql_connection");
+const connection = 
+	require("../../../external_routes/mysql_connection");
 let MySqlResults = require("../../../external_routes/mysql_results");
 
 // Encryption
 const bcrypt = require("bcrypt");
 const saltRounds = parseInt(process.env.BCRYPT_SALT);
-const bcryptHelpers = require("../../../custom_modules/bcrypt_helpers");
+const bcryptHelpers = 
+	require("../../../custom_modules/bcrypt_helpers");
 
 
 // Custom modules && variables
@@ -29,10 +31,14 @@ class UserController
 			const storedProcedureName = "getUserById";
 			const keywordParameters = [ req.params["userId"] ];
 			
-			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureName, keywordParameters)
+			mysqlHelpers.storedProcedureWithParamsAsync(
+					connection, storedProcedureName, keywordParameters
+				)
 				.then(function (result)
 				{
-					UserController._onSuccessfulGetUser(req, result, resolve, reject);
+					UserController._onSuccessfulGetUser(req, result, 
+														resolve, 
+														reject);
 				})
 				.catch(function (err)
 				{
@@ -53,10 +59,14 @@ class UserController
 			const storedProcedureName = "getUserByUsername";
 			const keywordParameters = [ req.params["username"] ];
 			
-			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureName, keywordParameters)
+			mysqlHelpers.storedProcedureWithParamsAsync(
+					connection, storedProcedureName, keywordParameters
+				)
 				.then(function (result)
 				{
-					UserController._onSuccessfulGetUser(req, result, resolve, reject);
+					UserController._onSuccessfulGetUser(req, result, 
+														resolve, 
+														reject);
 				})
 				.catch(function (err)
 				{
@@ -75,7 +85,8 @@ class UserController
 		{
 			let userExperience = new UserExperience(newResult);
 			let mysqlResults = new MySqlResults(
-				"Succeeded at finding User with params: " + req.params.toString(),
+				"Succeeded at finding User with params: " + 
+					req.params.toString(),
 				userExperience, null
 			);
 			
@@ -85,7 +96,8 @@ class UserController
 		else
 		{
 			let mysqlResults = new MySqlResults(
-				"Failed to find User with params: " + req.params.toString(),
+				"Failed to find User with params: " + 
+					req.params.toString(),
 				null, "User not found"
 			);
 			reject(mysqlResults);
@@ -125,8 +137,9 @@ class UserController
 						.then(function (user)
 						{
 							console.log(mysqlResults._results);
-							UserController._onSuccessfulLogin(mysqlResults._results, 
-															  resolve);
+							UserController._onSuccessfulLogin(
+								mysqlResults._results, resolve
+							);
 						})
 						.catch(function (err)
 						{
@@ -135,7 +148,8 @@ class UserController
 				})
 				.catch(function (err)
 				{
-					UserController._onFailedLogin("Invalid username", reject);
+					UserController._onFailedLogin("Invalid username", 
+												  reject);
 				});
 		});
 	}
@@ -182,7 +196,8 @@ class UserController
 	
 	static _onSuccessfulLogin(userExperience, resolve)
 	{
-		let mySqlResults = new MySqlResults("Successful Login", userExperience, 
+		let mySqlResults = new MySqlResults("Successful Login", 
+											userExperience, 
 											null);
 		resolve(mySqlResults);
 	}
@@ -203,7 +218,8 @@ class UserController
 			{
 				let mySqlResults = new MySqlResults("Failed Login", 
 													null, 
-													"User does not exist");
+													"User does not " + 
+													"exist");
 				reject(mySqlResults);
 			}
 		}
@@ -221,21 +237,26 @@ class UserController
 	
 	
 	
-	static async register(req, formData)
+	static async register(formData)
 	{
 		return new Promise(async function (resolve, reject)
 		{
-			const encryptedPassword = await bcryptHelpers.encryptPassword(
-				bcrypt, formData.password, saltRounds
-			);
+			const encryptedPassword = 
+				await bcryptHelpers.encryptPassword(
+					bcrypt, formData.password, saltRounds
+				);
 
 			const storedProcedureToRun = "registerUser";
-			const keywordParameters = [formData.username, encryptedPassword];
+			const keywordParameters = [formData.username, 
+									   encryptedPassword];
 
-			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
+			mysqlHelpers.storedProcedureWithParamsAsync(
+					connection, storedProcedureToRun, keywordParameters
+				)
 				.then(function (result)
 				{
-					UserController._onSuccessfulRegister(req, result, resolve);
+					UserController._onSuccessfulRegister(result, 
+														 resolve);
 				})
 				.catch(function (err)
 				{
@@ -244,10 +265,10 @@ class UserController
 		});
 	}
 	
-	static _onSuccessfulRegister(req, result, resolve)
+	static _onSuccessfulRegister(result, resolve)
 	{
-		let mySqlResults = new MySqlResults("Successful Register", result, 
-											null);
+		let mySqlResults = new MySqlResults("Successful Register", 
+											result, null);
 		resolve(mySqlResults);
 	}
 	
@@ -260,6 +281,39 @@ class UserController
 											"username may already " + 
 											"exist:\n" + err);
 		reject(mySqlResults);
+	}
+	
+	
+	
+	static async updateGoal(formData)
+	{
+		return new Promise(function (resolve, reject)
+		{
+			const storedProcedureToRun = "updateUserGoal";
+			const keywordParameters = [formData.userId, formData.userGoal];
+
+			mysqlHelpers.storedProcedureWithParamsAsync(
+					connection, storedProcedureToRun, keywordParameters
+				)
+				.then(function (result)
+				{
+					let results = 
+						new MySqlResults("Successful Update Goal", 
+										 "Updated Goal to: " + 
+											formData.userGoal, 
+										 null);
+					resolve(results);
+				})
+				.catch(function (err)
+				{
+					let results = 
+						new MySqlResults("Failed Update Goal", 
+										 null, 
+										 "Failed to update goal. " + 
+										 "Please try again.");
+					reject(results);
+				});
+		});
 	}
 }
 

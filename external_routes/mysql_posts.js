@@ -44,9 +44,9 @@ module.exports = (function()
 
 
 
-    /********************
-     * LOGIN & REGISTER *
-     ********************/
+    /********
+     * USER *
+     ********/
 	 
 	// Login
 	app.post("/login", function(req, res)
@@ -72,7 +72,24 @@ module.exports = (function()
 		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
 		const formData = req.body;
 		
-		UserController.register(req, formData)
+		UserController.register(formData)
+			.then(function (mySqlResults)
+			{
+				res.send(mySqlResults);
+			})
+			.catch(function (mySqlResultsErr)
+			{
+				res.send(mySqlResultsErr);
+			});
+	});
+	
+	// Update goal
+    app.post("/user/update/goal", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+		
+		UserController.updateGoal(formData)
 			.then(function (mySqlResults)
 			{
 				res.send(mySqlResults);
