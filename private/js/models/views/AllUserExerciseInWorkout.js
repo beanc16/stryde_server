@@ -19,8 +19,12 @@ class AllUserExerciseInWorkout
                 ueiResistance, exerciseName, exerciseDescription,
                 exerciseWeightTypeName, exerciseMuscleTypeName,
                 exerciseMovementTypeName, mgName, mgTypeName);
-        this._workout = new Workout(workoutId, userId, workoutName,
-                                    workoutDescription);
+        this._workout = new Workout({
+			"workout_id": workoutId, 
+			"user_id": userId, 
+			"workout_name": workoutName, 
+			"workout_description": workoutDescription,
+		});
         this._orderInWorkout = orderInWorkout;
     }
 

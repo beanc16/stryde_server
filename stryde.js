@@ -54,6 +54,8 @@ const bcryptHelpers = require("./custom_modules/bcrypt_helpers");
 /*
 app.use("/user", function(req, res, next)
 {
+	// Confirm that user is logged in
+	
     if (isUserLoggedIn(req))
     {
         next();
@@ -82,9 +84,11 @@ app.use("/user", function(req, res, next)
 // Must come after Middleware for Middleware to work
 const mysqlGets = require("./external_routes/mysql_gets");			// Get routes for MySQL
 const mysqlPosts = require("./external_routes/mysql_posts");		// Post routes for MySQL
+const miscGets = require("./external_routes/miscellaneous_gets");	// Get routes for miscellaneous stuff
 
 app.use("/", mysqlGets);
 app.use("/", mysqlPosts);
+app.use("/", miscGets);
 
 
 
@@ -101,19 +105,6 @@ app.use("/", mysqlPosts);
 // Index
 app.get("/", function(req, res)
 {
-	/*
-    // Not logged in
-    if (!isUserLoggedIn(req))
-    {
-        res.redirect("/login");
-    }
-
-    // Logged in
-    else
-    {
-        res.redirect("/user/home");
-    }
-	*/
 	res.redirect("/ping");
 });
 
@@ -122,15 +113,6 @@ app.get("/ping", function(req, res)
 {
     res.send("pong");
 });
-
-/*
-// Logout
-app.get("/logout", function(req, res)
-{
-    req.session.destroy();
-    res.redirect("/");
-});
-*/
 
 
 

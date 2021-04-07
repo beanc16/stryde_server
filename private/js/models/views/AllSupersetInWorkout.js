@@ -16,7 +16,12 @@ class AllSupersetInWorkout
                                            null, null, null, null,
                                            null);
         this._superset = new Superset(supersetId, userId, supersetName);
-        this._workout = new Workout(workoutId, userId, workoutName, workoutDescription);
+        this._workout = new Workout({
+			"workout_id": workoutId, 
+			"user_id": userId, 
+			"workout_name": workoutName, 
+			"workout_description": workoutDescription,
+		});
         this._orderInWorkout = orderInWorkout;
     }
 

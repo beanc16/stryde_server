@@ -11,12 +11,6 @@ module.exports = (function()
     // Routing
     const express = require("express");
     const app = express();
-
-
-    // Access req.body in post requests (USED FOR FORMS)
-    const bodyParser = require("body-parser");
-    app.use(bodyParser.json());                         // support json encoded bodies
-    app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 	
 	
 	// MySQL

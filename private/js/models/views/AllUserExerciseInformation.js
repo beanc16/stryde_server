@@ -16,10 +16,16 @@ class AllUserExerciseInformation
             userExerciseId, userId, exerciseId, ueiDescription,
             ueiSets, ueiReps, ueiWeight, ueiDuration, ueiDistance,
             ueiResistance);
-        this._exerciseAndMuscleGroupWithType = new ExerciseAndMuscleGroupWithType(
-            exerciseId, exerciseName, exerciseDescription,
-            exerciseWeightTypeName, exerciseMuscleTypeName,
-            exerciseMovementTypeName, mgName, mgTypeName);
+        this._exerciseAndMuscleGroupWithType = new ExerciseAndMuscleGroupWithType({
+            "exercise_id": exerciseId, 
+			"exercise_name": exerciseName, 
+			"exercise_description": exerciseDescription,
+            "exercise_weight_type_name": exerciseWeightTypeName, 
+			"exercise_muscle_type_name": exerciseMuscleTypeName,
+			"exercise_movement_type_name": exerciseMovementTypeName, 
+			"mg_name": mgName, 
+			"mg_type_name": mgTypeName
+		});
     }
 
     get userExerciseId()

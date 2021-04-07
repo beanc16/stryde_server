@@ -68,7 +68,6 @@ class WorkoutController
 	{
 		let newResults = result[0];
 		
-		
 		if (newResults != null && newResults.length > 0)
 		{
 			let resultsArray = [];
