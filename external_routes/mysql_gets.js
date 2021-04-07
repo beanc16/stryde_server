@@ -97,10 +97,24 @@ module.exports = (function()
 	// getAllSupersetsByUserId
     app.get("/user/supersets/:userId", async function (req, res)
     {
-		SupersetController.getByUserId(req)
+		SupersetController.getNonEmptyByUserId(req)
 			.then(function (mySqlResults)
 			{
-				res.send(mySqlResults);
+				SupersetController.getEmptyByUserId(req)
+					.then(function (mySqlResults2)
+					{
+						res.send(new MySqlResults(
+							"Successfully obtained all supersets",
+							{
+								"nonEmptySupersetResults": mySqlResults,
+								"emptySupersetResults": mySqlResults2,
+							}, null
+						));
+					})
+					.catch(function (mySqlResultsErr2)
+					{
+						res.send(mySqlResultsErr2);
+					});
 			})
 			.catch(function (mySqlResultsErr)
 			{
