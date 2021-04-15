@@ -225,8 +225,10 @@ class WorkoutController
 	{
 		return new Promise(function (resolve, reject)
 		{
-			const storedProcedureToRun = "updateWorkout";
-			const keywordParameters = [formData.workoutId, formData.workoutName, formData.workoutDescription];
+			const storedProcedureToRun = "updateWorkoutInfo";
+			const keywordParameters = [formData.workoutId, formData.workoutName, 
+									   formData.workoutDescription, 
+									   formData.userExerciseInfoAndOrderArray];
 
 			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
 				.then(function (result)
@@ -240,7 +242,7 @@ class WorkoutController
 				.catch(function (err)
 				{
 					let results = 
-						new MySqlResults("Failed Create Workout", 
+						new MySqlResults("Failed Update Workout", 
 										 null, 
 										 "Failed to update workout. " + 
 										 "Please try again.");

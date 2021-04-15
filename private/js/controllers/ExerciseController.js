@@ -127,6 +127,23 @@ class ExerciseController
 			resultsArray, null
 		);
 	}
+	
+	
+	
+	
+	
+	
+	/* 
+	 * POSTS
+	 */
+	
+	// Create / Insert
+	static async create(req, formData)
+	{
+		return new Promise(function (resolve, reject)
+		{
+		});
+	}
 }
 
 

@@ -32,7 +32,7 @@ class FullWorkoutOrderWithSupersetExercise
                 this.supersetId, this.supersetName, this.orderInSuperset
             );
 		
-		this.reinitializePublicVariables();
+		//this.reinitializePublicVariables();
     }
 	
 	tempInitializePublicVariables(fwowse)
