@@ -229,6 +229,7 @@ module.exports = (function()
      ******************/
 	
 	// Create user exercise
+	/*
     app.post("/user/create/userExercise", async function(req, res)
 	{
 		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
@@ -278,6 +279,7 @@ module.exports = (function()
 				res.send(mySqlResultsErr);
 			});
 	});
+	*/
 	
 	
 	

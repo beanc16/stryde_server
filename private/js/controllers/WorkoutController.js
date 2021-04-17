@@ -195,8 +195,9 @@ class WorkoutController
 	{
 		return new Promise(function (resolve, reject)
 		{
-			const storedProcedureToRun = "createWorkout";
-			const keywordParameters = [formData.userId, formData.workoutName, formData.workoutDescription];
+			const storedProcedureToRun = "createWorkoutInfo";
+			const keywordParameters = [formData.userId, formData.workoutName, formData.workoutDescription, 
+									   formData.userExerciseInfoAndOrderArray];
 
 			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
 				.then(function (result)
@@ -235,7 +236,7 @@ class WorkoutController
 				{
 					let results = 
 						new MySqlResults("Successful Update Workout", 
-										 "Updated workout", 
+										 "Updated workout: " + formData.workoutName, 
 										 null);
 					resolve(results);
 				})
@@ -256,8 +257,9 @@ class WorkoutController
 	{
 		return new Promise(function (resolve, reject)
 		{
-			const storedProcedureToRun = "deleteWorkout";
-			const keywordParameters = [formData.workoutId];
+			const storedProcedureToRun = "deleteWorkoutInfo";
+			const keywordParameters = [formData.workoutId, 
+									   formData.userExerciseInfoAndOrderArray];
 
 			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
 				.then(function (result)
