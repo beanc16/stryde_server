@@ -110,7 +110,7 @@ module.exports = (function()
     app.post("/user/create/workout", async function(req, res)
 	{
 		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
-		const formData = req.body;
+		let formData = req.body;
 		
 		WorkoutController.create(req, formData)
 			.then(function (mySqlResults)
