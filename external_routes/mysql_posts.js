@@ -38,6 +38,7 @@ module.exports = (function()
 	const UserController = require("../private/js/controllers/UserController");
 	const WorkoutController = require("../private/js/controllers/WorkoutController");
 	const SupersetController = require("../private/js/controllers/SupersetController");
+	const ExerciseController = require("../private/js/controllers/ExerciseController");
 	const UserExerciseController = require("../private/js/controllers/UserExerciseController");
 
 
@@ -220,7 +221,22 @@ module.exports = (function()
      * EXERCISES *
      *************/
 	
-	//
+	// Create exercise
+    app.post("/user/create/exercise", async function(req, res)
+	{
+		// FOR req.body, MUST DO require(body-parser); AT TOP OF PAGE
+		const formData = req.body;
+		
+		ExerciseController.create(req, formData)
+			.then(function (mySqlResults)
+			{
+				res.send(mySqlResults);
+			})
+			.catch(function (mySqlResultsErr)
+			{
+				res.send(mySqlResultsErr);
+			});
+	});
 	
 	
 	

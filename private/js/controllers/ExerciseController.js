@@ -142,6 +142,32 @@ class ExerciseController
 	{
 		return new Promise(function (resolve, reject)
 		{
+			const storedProcedureToRun = "createExerciseWithMuscleGroups";
+			const keywordParameters = [formData.exerciseName, 
+									   formData.exerciseWeightTypeId, 
+									   formData.exerciseMuscleTypeId, 
+									   formData.exerciseMovementTypeId, 
+									   formData.muscleGroupIds];
+
+			mysqlHelpers.storedProcedureWithParamsAsync(connection, storedProcedureToRun, keywordParameters)
+				.then(function (result)
+				{
+					let results = 
+						new MySqlResults("Successful Create Exercise", 
+										 "Created exercise: " + 
+											formData.exerciseName, 
+										 null);
+					resolve(results);
+				})
+				.catch(function (err)
+				{
+					let results = 
+						new MySqlResults("Failed Create Exercise", 
+										 null, 
+										 "Failed to create exercise. " + 
+										 "Please try again.");
+					reject(results);
+				});
 		});
 	}
 }

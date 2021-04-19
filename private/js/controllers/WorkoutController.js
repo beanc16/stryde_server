@@ -211,8 +211,6 @@ class WorkoutController
 				})
 				.catch(function (err)
 				{
-					//DELETETHIS
-					console.log("err", err);
 					let results = 
 						new MySqlResults("Failed Create Workout", 
 										 null, 
