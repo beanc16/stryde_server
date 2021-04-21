@@ -2,6 +2,16 @@
  * REQUIRES *
  ************/
 
+// HTTPs
+const https = require("https");
+const fs = require("fs");
+
+const options = {
+	key: fs.readFileSync("../../../../etc/letsencrypt/live/stryde.app/privkey.pem"),
+	cert: fs.readFileSync("../../../../etc/letsencrypt/live/stryde.app/fullchain.pem")
+};
+
+
 // Routing
 const express = require("express");
 const app = express();
@@ -54,8 +64,6 @@ const bcryptHelpers = require("./custom_modules/bcrypt_helpers");
 /*
 app.use("/user", function(req, res, next)
 {
-	// Confirm that user is logged in
-	
     if (isUserLoggedIn(req))
     {
         next();
@@ -84,11 +92,9 @@ app.use("/user", function(req, res, next)
 // Must come after Middleware for Middleware to work
 const mysqlGets = require("./external_routes/mysql_gets");			// Get routes for MySQL
 const mysqlPosts = require("./external_routes/mysql_posts");		// Post routes for MySQL
-const miscGets = require("./external_routes/miscellaneous_gets");	// Get routes for miscellaneous stuff
 
 app.use("/", mysqlGets);
 app.use("/", mysqlPosts);
-app.use("/", miscGets);
 
 
 
@@ -114,6 +120,15 @@ app.get("/ping", function(req, res)
     res.send("pong");
 });
 
+/*
+// Logout
+app.get("/logout", function(req, res)
+{
+    req.session.destroy();
+    res.redirect("/");
+});
+*/
+
 
 
 /*
@@ -138,7 +153,18 @@ app.post("*", function(req, res)
  * PORT *
  ********/
 
+// Http Server
+/*
 app.listen(process.env.STRYDE_PORT, function ()
 {
   console.log("App listening on port " + process.env.STRYDE_PORT);
+});
+*/
+
+// Https Server
+const httpsServer = https.createServer(options, app);
+
+httpsServer.listen(process.env.STRYDE_PORT, () => 
+{
+	console.log("Https App listening on port " + process.env.STRYDE_PORT);
 });

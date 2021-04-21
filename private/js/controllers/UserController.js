@@ -255,7 +255,8 @@ class UserController
 				)
 				.then(function (result)
 				{
-					UserController._onSuccessfulRegister(result, 
+					let userExperience = new UserExperience(result[0][0]);
+					UserController._onSuccessfulRegister(userExperience, 
 														 resolve);
 				})
 				.catch(function (err)
